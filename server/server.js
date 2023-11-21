@@ -1,8 +1,8 @@
-import express from 'express';
+import express from "express";
 import ViteExpress from "vite-express";
 
 // import router
-import {apiRouter} from './routes/api.js';
+import { apiRouter } from "./routes/api.js";
 
 const app = express();
 const PORT = 3000;
@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // define route handlers
-app.use('/', apiRouter);
+app.use("/", apiRouter);
 
 // app.use((req, res) =>
 //   res.status(404).send("This is not the page you're looking for...")
@@ -21,9 +21,9 @@ app.use('/', apiRouter);
 //error handler
 app.use((err, req, res, next) => {
   const defaultErr = {
-    log: 'Express error handler caught unknown middleware error',
+    log: "Express error handler caught unknown middleware error",
     status: 500,
-    message: { err: 'An error occurred' },
+    message: { err: "An error occurred" },
   };
   const errorObj = Object.assign({}, defaultErr, err);
   console.log(errorObj.log);

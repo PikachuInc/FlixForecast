@@ -1,37 +1,22 @@
 import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { createServer as createViteServer } from 'vite';
+import ViteExpress from "vite-express";
 
 // import router
-//import apiRouter from './routes/api';
+import {apiRouter} from './routes/api.js';
 
 const app = express();
-
 const PORT = 3000;
-
-const __filename = fileURLToPath(import.meta.url);
-
-const __dirname = path.dirname(__filename);
 
 // handle parsing request body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// handle requests for static files
-// app.use(express.static(path.resolve(__dirname, '../src')));
-// app.use(express.static('../src'));
-
-app.get('/', (req, res, next) => {
-  return res.sendFile(path.resolve(__dirname,'../index.html'));
-});
-
 // define route handlers
-// app.use('/api', apiRouter);
+app.use('/', apiRouter);
 
-app.use((req, res) =>
-  res.status(404).send("This is not the page you're looking for...")
-);
+// app.use((req, res) =>
+//   res.status(404).send("This is not the page you're looking for...")
+// );
 
 //error handler
 app.use((err, req, res, next) => {
@@ -46,10 +31,8 @@ app.use((err, req, res, next) => {
 });
 
 //start server
-app.listen(PORT, () => {
-  console.log(`Server listening on port: ${PORT}...`);
-});
-
-// module.exports = app;
+ViteExpress.listen(app, PORT, () =>
+  console.log("Server is listening on port 3000...")
+);
 
 export default app;

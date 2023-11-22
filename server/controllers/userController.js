@@ -1,6 +1,6 @@
 // const db = require('../models/models.js');
-import db from '../models/models.js';
-import bcrypt from 'bcryptjs';
+import db from "../models/models.js";
+import bcrypt from "bcryptjs";
 
 const userController = {};
 
@@ -14,7 +14,7 @@ userController.createUser = async (req, res, next) => {
       return next({
         log: `userController.createUser ERROR: username or password not entered`,
         status: 400,
-        message: { err: 'Username and Password are required!' },
+        message: { err: "Username and Password are required!" },
       });
     }
     // generate salt and encrypt with bcrypt
@@ -23,7 +23,7 @@ userController.createUser = async (req, res, next) => {
     // store username and hashed password in DB, return the newly created userId
     const vals = [username, hashedPassword];
     const queryCreate =
-      'INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id';
+      "INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id";
     const user = await db.query(queryCreate, vals);
     // grab the id of the newly created user and store on res.locals
     res.locals.userId = user.rows[0].id;
@@ -32,7 +32,7 @@ userController.createUser = async (req, res, next) => {
     return next({
       log: `usersController.createUser ERROR: ${err}`,
       status: 500,
-      message: { err: 'Error occured creating user' },
+      message: { err: "Error occured creating user" },
     });
   }
 };
@@ -44,23 +44,23 @@ userController.verifyUser = async (req, res, next) => {
     // verify that a username and password were provided. If not return an error
     if (!username || !password) {
       return next({
-        log: 'Missing username or password in usersController.verifyUser',
+        log: "Missing username or password in usersController.verifyUser",
         status: 400,
-        message: { err: 'Username and Password required' },
+        message: { err: "Username and Password required" },
       });
     }
     // find and save the user in the database with a matching username
-    const query = 'SELECT * FROM users WHERE users.username=$1';
+    const query = "SELECT * FROM users WHERE users.username=$1";
     const params = [username];
     const result = await db.query(query, params);
     const user = result.rows[0];
-    console.log('user from db select', user);
+    console.log("user from db select", user);
     // if can't find user in the database return error message
     if (!user) {
       return next({
-        log: 'No matches to username found in usersController.verifyUser',
+        log: "No matches to username found in usersController.verifyUser",
         status: 401,
-        message: { err: 'Invalid username or password' },
+        message: { err: "Invalid username or password" },
       });
     } else {
       try {
@@ -69,9 +69,9 @@ userController.verifyUser = async (req, res, next) => {
         if (!result) {
           // password did not match
           return next({
-            log: 'Invalid password in usersController.verifyUser',
+            log: "Invalid password in usersController.verifyUser",
             status: 401,
-            message: { err: 'Invalid username or password' },
+            message: { err: "Invalid username or password" },
           });
         } else {
           // store userID and username
@@ -84,7 +84,7 @@ userController.verifyUser = async (req, res, next) => {
         return next({
           log: `usersController.verifyUser bcrypt compare ERROR: ${err}`,
           status: 500,
-          message: { err: 'Error verifying user' },
+          message: { err: "Error verifying user" },
         });
       }
     }
@@ -93,7 +93,7 @@ userController.verifyUser = async (req, res, next) => {
     return next({
       log: `usersController.verifyUser ERROR: ${err}`,
       status: 500,
-      message: { err: 'Error verifying user' },
+      message: { err: "Error verifying user" },
     });
   }
 };
@@ -105,7 +105,7 @@ userController.getMovies = async (req, res, next) => {
 
     const queryToWatch = `
         SELECT m.title, m.overview, m.release_date, m.poster
-        FROM user_movies AS um 
+        FROM usermovies AS um 
         LEFT INNER JOIN movies AS m
         ON um.movieID = m.id
         WHERE um.username = $1 AND um.watched = false
@@ -115,7 +115,7 @@ userController.getMovies = async (req, res, next) => {
 
     const queryWatched = `
         SELECT m.title, m.overview, m.release_date, m.poster
-        FROM user_movies AS um 
+        FROM usermovies AS um 
         LEFT INNER JOIN movies AS m
         ON um.movieID = m.id
         WHERE um.username = $1 AND um.watched = true
@@ -128,7 +128,7 @@ userController.getMovies = async (req, res, next) => {
     return next({
       log: `usersController.getMovies ERROR: ${err}`,
       status: 500,
-      message: { err: 'Error getting movies' },
+      message: { err: "Error getting movies" },
     });
   }
 };
@@ -137,11 +137,12 @@ userController.addMovie = async (req, res, next) => {
   try {
     const { userID } = req.body;
     const movieID = res.locals.movieID;
-    const params = [userID, movieID];
+    const params = [userID, movieID.id];
+    console.log("params", params);
     const query = `
-        INSERT INTO user_movies (userID, movieID)
+        INSERT INTO usermovies (userid, movieid)
         VALUES ($1, $2)
-        RETURNING userID, movieID
+        RETURNING userid, movieid
         `;
     const result = await db.query(query, params);
     res.locals.movie = result.rows[0];
@@ -151,21 +152,21 @@ userController.addMovie = async (req, res, next) => {
     return next({
       log: `usersController.addMovie ERROR: ${err}`,
       status: 500,
-      message: { err: 'Error adding movie' },
+      message: { err: "Error adding movie" },
     });
   }
 };
 
 userController.watchMovie = async (req, res, next) => {
   try {
-    const { userID, movieID, rating } = req.body;
-    const params = [userID, movieID, rating];
+    const { userID, movieID, watched } = req.body;
+    const params = [userID, movieID, watched];
 
     const query = `
-        UPDATE user_movies 
+        UPDATE usermovies 
         SET watched = $3
-        WHERE userID = $1 AND movieID = $2
-        RETURNING userID, movieID, watched
+        WHERE userid = $1 AND movieid = $2
+        RETURNING userid, movieid, watched
         `;
     const result = await db.query(query, params);
     res.locals.movie = result.rows[0];
@@ -175,7 +176,7 @@ userController.watchMovie = async (req, res, next) => {
     return next({
       log: `usersController.watchMovie ERROR: ${err}`,
       status: 500,
-      message: { err: 'Error watching movie' },
+      message: { err: "Error watching movie" },
     });
   }
 };
@@ -186,10 +187,10 @@ userController.rateMovie = async (req, res, next) => {
     const params = [userID, movieID, rating];
 
     const query = `
-        UPDATE user_movies 
+        UPDATE usermovies 
         SET rating = $3
-        WHERE userID = $1 AND movieID = $2
-        RETURNING userID, movieID, rating
+        WHERE userid = $1 AND movieid = $2
+        RETURNING userid, movieid, rating
         `;
     const result = await db.query(query, params);
     res.locals.movie = result.rows[0];
@@ -199,7 +200,7 @@ userController.rateMovie = async (req, res, next) => {
     return next({
       log: `usersController.rateMovie ERROR: ${err}`,
       status: 500,
-      message: { err: 'Error rating movie' },
+      message: { err: "Error rating movie" },
     });
   }
 };

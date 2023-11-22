@@ -9,7 +9,7 @@ type movieBoxProps = {
 
 const MovieBox = (props: movieBoxProps) => {
   console.log("Rendering movieBox");
-  console.log("props: ", props);
+  console.log("props: ", props.props);
   console.log(`https://image.tmdb.org/t/p/w500/${props.poster}`);
 
   return (

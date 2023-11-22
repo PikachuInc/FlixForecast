@@ -4,7 +4,7 @@ import type { RootState } from "../store";
 
 interface Movie {
   title: string;
-  release_date: number;
+  release_date: string;
   overview: string;
   poster: string;
 }
@@ -37,10 +37,22 @@ export const movieSlice = createSlice({
     setToWatch: (state, action: PayloadAction<Movie[]>) => {
       state.watchedList = action.payload;
     },
+    setOneToWatch: (state, action: PayloadAction<Movie>) => {
+      state.toWatchList.push(action.payload);
+    },
+    setOneWatched: (state, action: PayloadAction<Movie>) => {
+      state.watchedList.push(action.payload);
+    },
   },
 });
 
-export const { setResults, setWatched, setToWatch } = movieSlice.actions;
+export const {
+  setResults,
+  setWatched,
+  setToWatch,
+  setOneToWatch,
+  setOneWatched,
+} = movieSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectMovieState = (state: RootState) => state.movies;

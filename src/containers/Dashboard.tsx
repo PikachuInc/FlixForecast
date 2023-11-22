@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Searched from "./Searched";
 import ToWatch from "./ToWatch";
 import Watched from "./Watched";
 import { setResults, setToWatch, setWatched } from "../features/movieSlice";
 import { useAppDispatch, useAppSelector } from "../hooks.ts";
 import { useNavigate } from "react-router";
+import { RootState } from "../store.ts";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -32,6 +33,28 @@ const Dashboard = () => {
     console.log("Setting searchLoaded to true");
     setSearchLoaded(true);
   };
+
+  const { userID, toWatchList, watchedList } = useAppSelector(
+    (state: RootState) => ({
+      userID: state.users.userID,
+      toWatchList: state.movies.toWatchList,
+      watchedList: state.movies.watchedList,
+    })
+  );
+
+  useEffect(() => {
+    const fetchMyMovies = async () => {
+      const response = await fetch(`/myMovies?${userID}`);
+      const data = await response.json();
+      const newToWatchList = data.toWatchList;
+      const newWatchedList = data.watchedList;
+      dispatch(setToWatch(newToWatchList));
+      dispatch(setWatched(newWatchedList));
+    };
+
+    fetchMyMovies();
+  }, [userID, dispatch]);
+
   return (
     <>
       <h1>Dashboard</h1>
@@ -40,8 +63,8 @@ const Dashboard = () => {
         <button type="submit">Search</button>
       </form>
       {searchLoaded ? <Searched /> : <div></div>}
-      <ToWatch />
-      <Watched />
+      <ToWatch toWatchList={toWatchList} />
+      <Watched watchedList={watchedList} />
     </>
   );
 };

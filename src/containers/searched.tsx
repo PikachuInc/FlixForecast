@@ -8,13 +8,15 @@ const Searched = () => {
   const movieState = useAppSelector(selectMovieState);
   const searchResults = movieState.searchResults;
 
-  console.log("searchResults:", searchResults);
-  //   useEffect(() => {
-  //     console.log("Searched component rendered");
-  //   }, [searchResults]);
-
   const moviesSearched = searchResults.map((movie, index) => (
-    <MovieBox key={index} props={movie} />
+    <MovieBox
+      key={index}
+      overview={movie.overview}
+      title={movie.title}
+      release_date={movie.release_date}
+      poster={movie.poster}
+      buttonText={"Add to Watch List"}
+    />
   ));
 
   return <div className="searched">{moviesSearched}</div>;

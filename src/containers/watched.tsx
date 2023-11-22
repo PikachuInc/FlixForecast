@@ -1,11 +1,8 @@
-import React from 'react';
+import React from "react";
 
 const Watched = () => {
-    return (
-        <div className='to-watch'>
-            {moviesWatched}
-        </div>
-    )
-}
+  const moviesWatched = [];
+  return <div className="watched">{moviesWatched}</div>;
+};
 
 export default Watched;

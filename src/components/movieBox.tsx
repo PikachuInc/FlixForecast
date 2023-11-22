@@ -8,15 +8,17 @@ type movieBoxProps = {
 };
 
 const MovieBox = (props: movieBoxProps) => {
-  console.log("Rendering movieBox");
-  console.log("props: ", props);
-  console.log(`https://image.tmdb.org/t/p/w500${props.props.poster}`);
+  // console.log("Rendering movieBox");
+  // console.log("props: ", props);
+  // console.log(`https://image.tmdb.org/t/p/w500${props.props.poster}`);
 
   return (
     <div className="card">
-      <h3>{props.props.title}</h3>
-      <p>{props.props.release_date}</p>
-      <p>{props.props.overview}</p>
+      <div className="words">      
+        <h3>{props.props.title}</h3>
+        <p>{props.props.release_date}</p>
+        <div className="overview"> <p>{props.props.overview}</p> </div>
+      </div>
       <img src={`https://image.tmdb.org/t/p/w500${props.props.poster}`}></img>
     </div>
   );

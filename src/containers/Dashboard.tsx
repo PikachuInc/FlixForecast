@@ -27,9 +27,9 @@ const Dashboard = () => {
     });
     const movies = await response.json();
     // update state with the searched movies
-    console.log("Movies obtained, dispatching!");
+    // console.log("Movies obtained, dispatching!");
     await dispatch(setResults(movies));
-    console.log("Setting searchLoaded to true");
+    // console.log("Setting searchLoaded to true");
     setSearchLoaded(true);
   };
   return (

@@ -8,14 +8,18 @@ const Searched = () => {
   const movieState = useAppSelector(selectMovieState);
   const searchResults = movieState.searchResults;
 
-  console.log("searchResults:", searchResults);
+  // console.log("searchResults:", searchResults);
   //   useEffect(() => {
   //     console.log("Searched component rendered");
   //   }, [searchResults]);
 
-  const moviesSearched = searchResults.map((movie, index) => (
-    <MovieBox key={index} props={movie} />
-  ));
+  const moviesSearched: any[] = [];
+  
+  for (let i = 0; i < 6; i++) {
+    if (searchResults[i].poster) {
+      moviesSearched.push(<MovieBox key={i} props={searchResults[i]} />)
+    }
+  }
 
   return <div className="searched">{moviesSearched}</div>;
 };

@@ -1,7 +1,7 @@
-import express from 'express';
+import express from "express";
 
-import userController from '../controllers/userController.js';
-import movieController from '../controllers/movieController.js';
+import userController from "../controllers/userController.js";
+import movieController from "../controllers/movieController.js";
 
 const router = express.Router();
 

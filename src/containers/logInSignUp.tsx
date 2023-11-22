@@ -1,7 +1,7 @@
-import React from 'react';
-import { useAppDispatch, useAppSelector } from '../hooks.ts';
-import { useNavigate } from 'react-router';
-import { login } from '../features/userSlice.ts';
+import React from "react";
+import { useAppDispatch, useAppSelector } from "../hooks.ts";
+import { useNavigate } from "react-router";
+import { login } from "../features/userSlice.ts";
 
 const LogInSignUp = () => {
   const navigate = useNavigate();
@@ -15,17 +15,17 @@ const LogInSignUp = () => {
       username: username,
       password: password,
     });
-    const response = await fetch('/login', {
-      method: 'POST',
+    const response = await fetch("/login", {
+      method: "POST",
       headers: {
-        'Content-type': 'application/json; charset=UTF-8',
+        "Content-type": "application/json; charset=UTF-8",
       },
       body: body,
     });
     const user = await response.json();
     if (response.status === 200) {
-      dispatch(login(user.username));
-      navigate('/');
+      dispatch(login({ username: user.username, userID: user.userID }));
+      navigate("/");
     }
   };
 

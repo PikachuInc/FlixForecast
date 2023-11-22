@@ -64,11 +64,13 @@ const MovieBox = (props: movieBoxProps) => {
 
   return (
     <div className='card'>
-      <h3>{props.title}</h3>
-      <p>{props.release_date}</p>
-      <p>{props.overview}</p>
+      <div className='words'>
+        <h3>{props.title}</h3>
+        <p>{props.release_date}</p>
+        <div className='overview'> <p>{props.overview}</p> </div>
+        <button onClick={handleClick}>{props.buttonText}</button>
+      </div>
       <img src={`https://image.tmdb.org/t/p/w500${props.poster}`}></img>
-      <button onClick={handleClick}>{props.buttonText}</button>
     </div>
   );
 };

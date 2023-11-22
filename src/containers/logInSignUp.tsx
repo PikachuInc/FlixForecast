@@ -33,14 +33,14 @@ const LogInSignUp = () => {
     <div
       className='login'
       style={{
-        backgroundColor: '#eaeaea',
+        backgroundColor: '#303030',
         padding: '20px',
         borderRadius: '8px',
         maxWidth: '300px',
         margin: 'auto',
       }}
     >
-      <p style={{ fontSize: '30px', marginBottom: '20px', color: 'black' }}>
+      <p style={{ fontSize: '30px', marginBottom: '20px' }}>
         Login
       </p>
       <form onSubmit={handleSubmit}>

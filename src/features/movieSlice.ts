@@ -1,19 +1,19 @@
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
-import type { RootState } from '../store'
+import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import type { RootState } from "../store";
 
 interface Movie {
-  title: string,
-  release_date: number,
-  overview: string,
-  poster: string,
+  title: string;
+  release_date: number;
+  overview: string;
+  poster: string;
 }
 
 // Define a type for the slice state
 interface MovieState {
-  searchResults: Movie[],
-  toWatchList: Movie[],
-  watchedList: Movie[]
+  searchResults: Movie[];
+  toWatchList: Movie[];
+  watchedList: Movie[];
 }
 
 // Define the initial state using that type
@@ -21,10 +21,10 @@ const initialState: MovieState = {
   searchResults: [],
   toWatchList: [],
   watchedList: [],
-}
+};
 
 export const movieSlice = createSlice({
-  name: 'movies',
+  name: "movies",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
@@ -38,11 +38,11 @@ export const movieSlice = createSlice({
       state.watchedList = action.payload;
     },
   },
-})
+});
 
-export const { setResults, setWatched, setToWatch } = movieSlice.actions
+export const { setResults, setWatched, setToWatch } = movieSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectMovieState = (state: RootState) => state;
+export const selectMovieState = (state: RootState) => state.movies;
 
-export default movieSlice.reducer
+export default movieSlice.reducer;

@@ -22,7 +22,15 @@ router.post("/login", userController.verifyUser, (req, res) => {
 });
 
 // route for searching movies
-// GET to '/movies?title'
+// POST to '/movies'
+router.post(
+  "/movies",
+  movieController.searchMovies,
+  movieController.simplifyMovies,
+  (req, res) => {
+    return res.status(200).json(res.locals.movies);
+  }
+);
 
 // route for populating your movie lists
 // GET to '/myMovies?userID'
